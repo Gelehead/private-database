@@ -1,0 +1,23 @@
+Small day, 
+
+read a bit on the documentation of agents jl
+
+downloaded julia and every package needed to make the simulations work
+
+have an almost working agents jl program ( trouble with abmplot and rotate_polygon ) 
+in the flock program, see school computer -> private-database/internship/julia sim/flock.jl
+
+Starting to get the overall structure with the @agent followed by its parameters, dont quite
+get the model initialization and model overall
+
+Agents jl getting started
+https://juliadynamics.github.io/Agents.jl/stable/#Getting-started
+
+github source code
+https://github.com/JuliaDynamics/Agents.jl/blob/c48ee643dc7913852e9bfc6559438018c313b4b9/src/spaces/continuous.jl#L40-L90
+
+flocking model + tuto
+https://juliadynamics.github.io/Agents.jl/stable/examples/flock/#Flocking-model
+
+API documentation
+https://juliadynamics.github.io/Agents.jl/stable/api/#[Available-spaces](@ref-available_spaces)
