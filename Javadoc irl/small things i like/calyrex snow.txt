@@ -1,0 +1,68 @@
+Calyrex-Ice @ Choice Band  
+Ability: As One (Glastrier)  
+Level: 50  
+Tera Type: Psychic  
+EVs: 252 HP / 252 Atk / 4 SpD  
+Adamant Nature  
+- Glacial Lance  
+- Zen Headbutt  
+- Bulldoze  
+- Close Combat  
+
+Iron Bundle @ Choice Specs  
+Ability: Quark Drive  
+Level: 50  
+Tera Type: Ice  
+EVs: 4 Atk / 252 SpA / 252 Spe  
+Naive Nature  
+- Avalanche  
+- Freeze-Dry  
+- Chilling Water  
+- Whirlpool  
+
+Zapdos @ Life Orb  
+Ability: Pressure  
+Level: 50  
+Tera Type: Electric  
+EVs: 252 SpA / 4 SpD / 252 Spe  
+Timid Nature  
+IVs: 0 Atk  
+- Heat Wave  
+- Thunderbolt  
+- Volt Switch  
+- Ancient Power  
+
+Flutter Mane @ Choice Scarf  
+Ability: Protosynthesis  
+Level: 50  
+Tera Type: Ghost  
+EVs: 252 SpA / 4 SpD / 252 Spe  
+Timid Nature  
+IVs: 0 Atk  
+- Calm Mind  
+- Dazzling Gleam  
+- Shadow Ball  
+- Thunderbolt  
+
+Ninetales-Alola @ Aguav Berry  
+Ability: Snow Warning  
+Level: 50  
+Tera Type: Ice  
+EVs: 4 HP / 252 SpA / 252 Spe  
+Timid Nature  
+IVs: 0 Atk  
+- Blizzard  
+- Aurora Veil  
+- Dazzling Gleam  
+- Protect  
+
+Tornadus (M) @ Focus Sash  
+Ability: Prankster  
+Level: 50  
+Tera Type: Flying  
+EVs: 252 SpA / 4 SpD / 252 Spe  
+Timid Nature  
+- Sludge Wave  
+- Tailwind  
+- Hammer Arm  
+- Snowscape
