@@ -1,7 +1,8 @@
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 import pandas as pd
 from cmath import log10
+import re
 
 # Utility functions 
 def get3digitFormat(num):
@@ -23,10 +24,14 @@ def get_content(p_soup):
     text_parts = []
 
     for content in p_soup.contents:
-        if content.name == 'img':
-            text_parts.append(dices_adapter(content['title']))
+        if isinstance(content, Tag):
+            if content.name == 'img':
+                text_parts.append(dices_adapter(content['title']))
+            elif content.name == 'strong':
+                text_parts.append(content.get_text(strip=True))
         else:
             text_parts.append(content.strip())
+
     return ' '.join(text_parts)
 
 def dices_adapter(dice):
@@ -34,6 +39,8 @@ def dices_adapter(dice):
     match dice :
         case "diceb":
             return "defense die"
+        case _:
+            return dice
 
 
 # TODO : automatic page making
@@ -45,18 +52,41 @@ def allCards(writeAllInFile=False):
     cards = []
     for i in range(1, 270):
         cards.append(singleCard("https://oathcards.seiyria.com/card/OATH-" + get3digitFormat(i) + "?q=&d=images&s=name&b=asc&p=0"))
-    df = pd.DataFrame(cards, columns=['Title', 'Faction', 'Type', 'Effect', 'FAQ text', 'image'])
+    df = pd.DataFrame(cards, columns=['Title', 'Category', 'Type', 'Effect', 'FAQ text', 'image', 'site_capacity'])
+    
+    if writeAllInFile:
+        df.to_csv("AllCards.csv", index=False)
+        
+    return df
 
 def singleCard(url, writeInFile=False):
     response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
     
-    print(soup)
-    
     data = []
+    
+    # ----------------    Categories    ----------------
+    chips = [chip.get_text(strip=True) for label in soup.findAll('ion-label') for chip in label.find_all('ion-chip')]
+    extension = chips[0]
+    category = chips[1] if len(chips) > 1 else 'Victory condition' if extension == 'Reference' else None
+    # TODO : find some program thing to recognize if there is a tree, advisor or nothing to get better type recognition
+    type = chips[2] if len(chips) > 2 else None
+    
+    # ---------------- Main cards features ----------------
     title = soup.find('h1').get_text()
     image = 'https://ledercardcdn.seiyria.com/cards/oath/en-US/' + text_to_image_link(title) + '.webp'
     effect = get_content(soup.find('app-card-text').find('p'))
+    site_capacity = int(' '.join(label.get_text(separator=' ', strip=True) for label in soup.find_all('ion-label')).split("Card capacity:")[1].split()[0]) if "Card capacity:" in effect else None
+    
+    # ---------------- FAQ and More Oath ----------------
+    ion_items = soup.find_all('ion-item', itemtype="https://schema.org/Question")
+    faq = []
+    for item in ion_items:
+        question = item.find('h3', itemprop='name').get_text(strip=True)
+        answer = item.find('p', itemprop='text').get_text(strip=True)
+        faq.append({'question': question, 'answer': answer})
+    
+    data = [title, category, type, effect, faq, image, site_capacity]
     
     # create simple web page layout for the cards 
     if writeInFile:
@@ -65,4 +95,4 @@ def singleCard(url, writeInFile=False):
         
     return data
 
-allCards()
+allCards(True)
