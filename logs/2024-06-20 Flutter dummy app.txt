@@ -1,0 +1,12 @@
+Followed the instructions up to "add functionnality" (6th step) and have a small functionnal
+custom app, should be useful as experience for the future.
+
+links : 
+
+https://codelabs.developers.google.com/codelabs/flutter-codelab-first#5
+
+Feedback :
+should write songs or sum
+Flutter aint difficult at all man, god bless easy programming
+
+be loving saint motel
