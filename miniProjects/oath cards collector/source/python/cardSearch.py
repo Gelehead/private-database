@@ -76,7 +76,8 @@ def singleCard(url, writeInFile=False):
     title = soup.find('h1').get_text()
     image = 'https://ledercardcdn.seiyria.com/cards/oath/en-US/' + text_to_image_link(title) + '.webp'
     effect = get_content(soup.find('app-card-text').find('p'))
-    site_capacity = int(' '.join(label.get_text(separator=' ', strip=True) for label in soup.find_all('ion-label')).split("Card capacity:")[1].split()[0]) if "Card capacity:" in effect else None
+    
+    site_capacity = next((int(p.text.split(":")[1]) for p in soup.find_all('p') if "Card Capacity" in p.text), None)
     
     # ---------------- FAQ and More Oath ----------------
     ion_items = soup.find_all('ion-item', itemtype="https://schema.org/Question")

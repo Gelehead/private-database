@@ -1,0 +1,40 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.container {
+    display: flex;
+    justify-content: space-around; /* Change this value to see different alignments */
+    width: 80%;
+    background-color: lightgray;
+    padding: 20px;
+}
+
+/*
+flex-start: Items are packed toward the start of the flex container. This is the default value.
+
+flex-end: Items are packed toward the end of the flex container.
+
+center: Items are centered along the main axis.
+
+space-between: Items are evenly distributed in the flex container. The first item is placed at the start, and the last item is placed at the end, with equal space between the items.
+
+space-around: Items are evenly distributed in the flex container, with equal space around them. The space between any two items is twice as large as the space between the items and the container's edges.
+
+space-evenly: Items are distributed so that the spacing between any two items, and the spacing between the items and the container's edges, is equal.
+*/
+
+.box {
+    width: 50px;
+    height: 50px;
+    background-color: teal;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}

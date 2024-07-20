@@ -1,0 +1,23 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.rectangle {
+    width: 1600px;
+    height: 800px;
+    background: linear-gradient(to right, rgb(5, 224, 34), #4A97A9, #992F1D);
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+}
+
+.cradle, .provinces, .hinterlands {
+    width: 33.33%;
+    height: 100%;
+    background: transparent; /* Make the background transparent to see the gradient */
+}
