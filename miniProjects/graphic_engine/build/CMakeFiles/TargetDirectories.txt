@@ -1,0 +1,8 @@
+D:/Escritorio/database/miniProjects/graphic_engine/build/CMakeFiles/Experimental.dir
+D:/Escritorio/database/miniProjects/graphic_engine/build/CMakeFiles/Nightly.dir
+D:/Escritorio/database/miniProjects/graphic_engine/build/CMakeFiles/Continuous.dir
+D:/Escritorio/database/miniProjects/graphic_engine/build/CMakeFiles/NightlyMemoryCheck.dir
+D:/Escritorio/database/miniProjects/graphic_engine/build/CMakeFiles/graphic_thing.dir
+D:/Escritorio/database/miniProjects/graphic_engine/build/CMakeFiles/RUN_TESTS.dir
+D:/Escritorio/database/miniProjects/graphic_engine/build/CMakeFiles/ALL_BUILD.dir
+D:/Escritorio/database/miniProjects/graphic_engine/build/CMakeFiles/ZERO_CHECK.dir

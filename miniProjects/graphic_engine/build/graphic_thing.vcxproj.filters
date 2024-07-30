@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\Escritorio\database\miniProjects\graphic_engine\simple_image_output.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\Escritorio\database\miniProjects\graphic_engine\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{8BD09D54-6E3A-3CC5-BD85-D24D6CF2757C}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

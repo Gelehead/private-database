@@ -1,0 +1,10 @@
+^D:\ESCRITORIO\DATABASE\MINIPROJECTS\GRAPHIC_ENGINE\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/Escritorio/database/miniProjects/graphic_engine -BD:/Escritorio/database/miniProjects/graphic_engine/build --check-stamp-file D:/Escritorio/database/miniProjects/graphic_engine/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

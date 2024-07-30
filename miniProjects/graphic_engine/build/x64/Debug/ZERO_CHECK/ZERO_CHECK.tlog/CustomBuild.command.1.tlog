@@ -1,0 +1,10 @@
+^D:\ESCRITORIO\DATABASE\MINIPROJECTS\GRAPHIC_ENGINE\BUILD\CMAKEFILES\573230E47EED55D9A88732EAFEA5A315\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/Escritorio/database/miniProjects/graphic_engine -BD:/Escritorio/database/miniProjects/graphic_engine/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/Escritorio/database/miniProjects/graphic_engine/build/graphic_thing.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
