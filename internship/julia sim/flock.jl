@@ -1,23 +1,9 @@
-# # Flocking model
-
-# ```@raw html
-# <video width="auto" controls autoplay loop>
-# <source src="../flocking.mp4" type="video/mp4">
-# </video>
-# ```
-
-# The flock model illustrates how flocking behavior can emerge when each bird follows three simple rules:
-#
-# * maintain a minimum distance from other birds to avoid collision
-# * fly towards the average position of neighbors
-# * fly in the average direction of neighbors
-
-# ## Defining the core structures
-
-# We begin by calling the required packages and defining an agent type representing a bird.
 using Agents
 using Random, LinearAlgebra
+using CairoMakie
+using GeometryBasics
 
+# Define the Bird agent
 @agent struct Bird(ContinuousAgent{2,Float64})
     speed::Float64
     cohere_factor::Float64
@@ -27,21 +13,7 @@ using Random, LinearAlgebra
     visual_distance::Float64
 end
 
-# The fields `id` and `pos`, which are required for agents on [`ContinuousSpace`](@ref),
-# are part of the struct. The field `vel`, which is also added by
-# using [`ContinuousAgent`](@ref) is required for using [`move_agent!`](@ref)
-# in `ContinuousSpace` with a time-stepping method.
-# `speed` defines how far the bird travels in the direction defined by `vel` per `step`.
-# `separation` defines the minimum distance a bird must maintain from its neighbors.
-# `visual_distance` refers to the distance a bird can see and defines a radius of neighboring birds.
-# The contribution of each rule defined above receives an importance weight: `cohere_factor`
-# is the importance of maintaining the average position of neighbors,
-# `match_factor` is the importance of matching the average trajectory of neighboring birds,
-# and `separate_factor` is the importance of maintaining the minimum
-# distance from neighboring birds.
-
-# The function `initialize_model` generates birds and returns
-# a model object using default values.
+# Initialize the model
 function initialize_model(;
     n_birds = 100,
     speed = 1.5,
@@ -50,10 +22,10 @@ function initialize_model(;
     separate_factor = 0.25,
     match_factor = 0.04,
     visual_distance = 5.0,
-    extent = (100, 100),
+    extent = (200, 200),  # Increase the environment size
     seed = 42,
 )
-    space2d = ContinuousSpace(extent; spacing = visual_distance/1.5)
+    space2d = ContinuousSpace(extent; spacing = visual_distance / 1.5)
     rng = Random.MersenneTwister(seed)
 
     model = StandardABM(Bird, space2d; rng, agent_step!, scheduler = Schedulers.Randomly())
@@ -73,78 +45,78 @@ function initialize_model(;
     return model
 end
 
-# ## Defining the agent_step!
-# `agent_step!` is the primary function called for each step and computes velocity
-# according to the three rules defined above.
+# Define the agent step function
 function agent_step!(bird, model)
-    ## Obtain the ids of neighbors within the bird's visual distance
     neighbor_ids = nearby_ids(bird, model, bird.visual_distance)
     N = 0
     match = separate = cohere = (0.0, 0.0)
-    ## Calculate behaviour properties based on neighbors
+    
     for id in neighbor_ids
         N += 1
         neighbor = model[id].pos
         heading = get_direction(bird.pos, neighbor, model)
 
-        ## `cohere` computes the average position of neighboring birds
         cohere = cohere .+ heading
-        if euclidean_distance(bird.pos, neighbor, model) < bird.separation
-            ## `separate` repels the bird away from neighboring birds
-            separate = separate .- heading
+        dist = euclidean_distance(bird.pos, neighbor, model)
+        if dist < bird.separation
+            separate = separate .- (heading / dist^2)  # Increase separation force
         end
-        ## `match` computes the average trajectory of neighboring birds
         match = match .+ model[id].vel
     end
+    
     N = max(N, 1)
-    ## Normalise results based on model input and neighbor count
     cohere = cohere ./ N .* bird.cohere_factor
-    separate = separate ./ N .* bird.separate_factor
+    separate = separate .* bird.separate_factor
     match = match ./ N .* bird.match_factor
-    ## Compute velocity based on rules defined above
+    
     bird.vel = (bird.vel .+ cohere .+ separate .+ match) ./ 2
     bird.vel = bird.vel ./ norm(bird.vel)
-    ## Move bird according to new velocity and speed
+    
     move_agent!(bird, model, bird.speed)
 end
 
-model = initialize_model()
-
-# ## Plotting the flock
-
-using CairoMakie
-CairoMakie.activate!() # hide
-
-# The great thing about [`abmplot`](@ref) is its flexibility. We can incorporate the
-# direction of the birds when plotting them, by making the "marker" function `agent_marker`
-# create a `Polygon`: a triangle with same orientation as the bird's velocity.
-# It is as simple as defining the following function:
-
-const bird_polygon = Makie.Polygon(Point2f[(-1, -1), (2, 0), (-1, 1)])
+# Define the bird marker for plotting
 function bird_marker(b::Bird)
-    φ = atan(b.vel[2], b.vel[1]) #+ π/2 + π
-    rotate_polygon(bird_polygon, φ)
+    φ = atan(b.vel[2], b.vel[1])
+    rot_mat = [cos(φ) -sin(φ); sin(φ) cos(φ)]
+    polygon = Point2f[(-0.5, -0.5), (1, 0), (-0.5, 0.5)]  # Smaller bird size
+    transformed_polygon = Point2f[(rot_mat * p) + b.pos for p in polygon]
+    return GeometryBasics.Polygon(transformed_polygon)
 end
 
-# Where we have used the utility functions `scale_polygon` and `rotate_polygon` to act on a
-# predefined polygon. `translate_polygon` is also available.
-# We now give `bird_marker` to `abmplot`, and notice how
-# the `agent_size` keyword is meaningless when using polygons as markers.
-
+# Initialize the model again
 model = initialize_model()
-figure, = abmplot(model; agent_marker = bird_marker)
-figure
 
-# And let's also do a nice little video for it:
-abmvideo(
-    "flocking.mp4", model;
-    agent_marker = bird_marker,
-    framerate = 20, frames = 150,
-    title = "Flocking"
-)
+# Function to extract bird markers from the model
+function extract_bird_markers(model)
+    return [bird_marker(agent) for agent in allagents(model)]
+end
 
-# ```@raw html
-# <video width="auto" controls autoplay loop>
-# <source src="../flocking.mp4" type="video/mp4">
-# </video>
-# ```
+# Custom abmplot function without unsupported attributes
+function custom_abmplot!(ax::Axis, model)
+    polygons = extract_bird_markers(model)
+    poly!(ax, polygons; color = :blue)
+end
+
+# Plotting the flock using custom abmplot function
+fig = Figure(resolution = (800, 800))
+ax = Axis(fig[1, 1], title = "Flocking Simulation")
+custom_abmplot!(ax, model)
+display(fig)
+
+# Function to update the model and plot
+function update_fn!(model, ax)
+    step!(model, 1)
+    custom_abmplot!(ax, model)
+end
+
+# Function to clear the plot
+function clear_plot!(ax)
+    empty!(ax)
+end
+
+# Record the simulation
+record(fig, "flocking.mp4", 1:1000) do i
+    clear_plot!(ax)
+    update_fn!(model, ax)
+end
